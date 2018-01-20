@@ -4,7 +4,7 @@ use mmvc\models\data\RDBRecord;
 
 /**
  * Модель загруженного в сервис видео
- * @property integer id
+ * @property integer $id
  * @property string $url
  * @property string $user_id
  */

@@ -24,7 +24,6 @@ class HomeController extends WebController {
     }
 
     public function actionIndex() {
-        //var_dump($_COOKIE);
         $isOBS = isset($_REQUEST['obs']) && $_REQUEST['obs'] === 'true';
         $isAdmin = isset($_REQUEST['admin']) && $_REQUEST['admin'] === 'true';
         if ($isAdmin === true) {
@@ -37,7 +36,7 @@ class HomeController extends WebController {
         
         $videos = models\Video::select(['user.name username', 'video.url', 'video.id', 'video.is_viewed'])->
                 join(models\Video::JOIN_TYPE_LEFT, 'user', 'user.id = video.user_id')->
-                where('video.is_viewed = :viewed', ['viewed' => 1])->
+                where('video.is_viewed = :viewed', ['viewed' => 0])->
                 execute();
         $data = array();
 
@@ -52,7 +51,6 @@ class HomeController extends WebController {
         $this->appendVariable('video_urls', json_encode($video_urls));
         $this->appendVariable('isAdmin', $isAdmin);
         $this->appendVariable('isOBS', $isOBS);
-        $this->appendVariable('year', date('Y'));
         $this->appendVariable('www_root', $this->getHttpRootPath());
         $this->render('index');
     }

@@ -4,7 +4,7 @@ function obs()
 {
     $.ajax({
             type: "POST",
-            url: "/mmvc/video/obs/obs/true",
+            url: "/twitchwebm/video/obs/obs/true",
             //data: {video_id: video_id},
             dataType: 'json',
             success: function (data)

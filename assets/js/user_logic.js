@@ -26,7 +26,7 @@ function getNewWebm()
     console.log('tick: '+ids);        
     $.ajax({
             type: "POST",
-            url: "/mmvc/video/getnew",
+            url: "/twitchwebm/video/getnew",
             data: {old_ids: ids},
             dataType: 'json',
             success: function (data)
@@ -67,7 +67,7 @@ $(document).ready(function () {
         
         $.ajax({
             type: "POST",
-            url: "/mmvc/video/upload",
+            url: "/twitchwebm/video/upload",
             data: $("#frm-upload").serialize(),
             dataType: 'json',
             success: function (data)

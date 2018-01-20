@@ -25,9 +25,10 @@ class VideoController extends WebController
 
     public function actionUpload()
     {
+        header('Content-type: application/json; charset=utf-8');
         try {
             $name = $_POST['user_name'];
-            $user = models\User::select('id')->where('name = "' . $name . '"')->execute();
+            $user = models\User::select('id')->where('name = :name', ['name' => $name])->execute();
 
             if (count($user) == 0) {
                 $user = new models\User();
@@ -50,7 +51,7 @@ class VideoController extends WebController
             ];
 
             $result = [
-                'html' => $this->getHtmlContent('views/home/webm_block.tpl', $params),
+                'html' => $this->getHtmlContent('views/home/webm_block.php', $params),
                 'url' => htmlspecialchars($video->url),
             ];
 
@@ -70,6 +71,7 @@ class VideoController extends WebController
 
     public function actionRemove()
     {
+        header('Content-type: application/json; charset=utf-8');
         if (isset($_POST['video_id']))
             return $this->actionHide($_POST['video_id']);
 
@@ -78,6 +80,7 @@ class VideoController extends WebController
 
     public function actionUpdate()
     {
+        header('Content-type: application/json; charset=utf-8');
         if (isset($_POST['video_id']))
             return $this->actionHide($_POST['video_id'], true);
 
@@ -86,6 +89,7 @@ class VideoController extends WebController
 
     private function actionHide($id, $current = false)
     {
+        header('Content-type: application/json; charset=utf-8');
         if (!isset($_SESSION['auth']) || $_SESSION['auth'] !== true) {
             return json_encode(['error' => 1, 'data' => 'Access level error']);
         }
@@ -101,14 +105,16 @@ class VideoController extends WebController
 
     public function actionGetnew()
     {
+        header('Content-type: application/json; charset=utf-8');
         if (!isset($_POST['old_ids'])) {
             return json_encode(['error' => 1, 'data' => '']);
         }
 
         $in_array = $_POST['old_ids'];
+        $notInStr = !empty($in_array) ? "video.id not in ($in_array)" : '1';
         $videos = models\Video::select(['video.id video_id', 'video.url url', 'user.name username'])->
                 join(models\Video::JOIN_TYPE_LEFT, 'user', 'user.id = video.user_id')->
-                where("video.id not in ($in_array) and video.is_viewed=0")->execute();
+                where("$notInStr and video.is_viewed=0")->execute();
 
         $v_res = ['error' => 0, 'data' => []];
         if (!is_bool($videos)) {
@@ -121,7 +127,7 @@ class VideoController extends WebController
                     ],
                 ];
                 array_push($v_res['data'], [
-                    'html' => $this->getHtmlContent('views/home/webm_block.tpl', $params),
+                    'html' => $this->getHtmlContent('views/home/webm_block.php', $params),
                     'url' => htmlspecialchars($video->url),
                 ]);
             }
@@ -132,6 +138,7 @@ class VideoController extends WebController
 
     public function actionObs()
     {
+        header('Content-type: application/json; charset=utf-8');
         if (isset($_REQUEST['obs']) && boolval($_REQUEST['obs']) === true) {
             $json_result = json_encode($_SESSION['obs']);
             unset($_SESSION['obs']);
