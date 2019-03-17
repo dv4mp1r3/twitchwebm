@@ -1,26 +1,29 @@
 <?php
 
-use mmvc\models\data\RDBHelper;
-use mmvc\core\Router;
+use mmvc\core\Application;
 
-$config = ['db' => 
+return [
+    Application::CONFIG_KEY_DB =>
+        [
+            Application::CONFIG_PARAM_DB_DRIVER => mmvc\models\data\RDBHelper::DB_TYPE_MYSQL,
+            Application::CONFIG_PARAM_DB_USERNAME => 'root',
+            Application::CONFIG_PARAM_DB_PASSWORD => '',
+            Application::CONFIG_PARAM_DB_HOST => 'localhost',
+            Application::CONFIG_PARAM_DB_SCHEMA => 'mmvc_test',
+        ],
+    Application::CONFIG_KEY_USERS => [
+        'admin' =>
             [
-                'driver' => RDBHelper::DB_TYPE_MYSQL,
-                'username' => 'root',
-                'password' => '',
-                'host' => 'localhost',
-                'schema' => 'mmvc_test',
+                'username' => 'admin',
+                'password' => '123',
+                'user_hash' => '24wejdslkfjsdfh2k3h5qwd',
             ],
-            'users' => [
-                'admin' =>
-                [
-                    'username' => 'admin',
-                    'password' => '123',
-                    'user_hash' => '24wejdslkfjsdfh2k3h5qwd',
-                ],
-            ],
-            'logpath' => MMVC_ROOT_DIR.DIRECTORY_SEPARATOR.'log'.DIRECTORY_SEPARATOR.'main.log',
-            'timezone' => 'Etc/GMT-3',
-            'route' => Router::ROUTE_TYPE_FRIENDLY,
-    ];
-
+    ],
+    Application::CONFIG_KEY_LOGPATH => dirname(__FILE__) . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR . 'main.log',
+    Application::CONFIG_KEY_TIMEZONE => 'Etc/GMT-3',
+    Application::CONFIG_KEY_ROUTE => mmvc\core\Router::ROUTE_TYPE_FRIENDLY,
+    Application::CONFIG_KEY_DEFAULT_ACTION => [
+        Application::CONFIG_PARAM_DEFAULT_CONTROLLER => 'guest',
+        Application::CONFIG_KEY_DEFAULT_ACTION => 'info'
+    ],
+];
